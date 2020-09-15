@@ -9,7 +9,7 @@ async function quickstart() {
   try {
     const zone = compute.zone('us-central1-c');
 
-    const vmName = 'node-vm-test';
+    const vmName = 'all-as-code-instance';
     const config = {
       os: 'ubuntu',
       machineType: 'g1-small',
@@ -17,6 +17,7 @@ async function quickstart() {
       http: true,
       metadata: {
         items: [
+          /**
           {
             key: 'startup-script',
             value: `
@@ -31,8 +32,33 @@ async function quickstart() {
               sudo systemctl start jenkins
             `
           },
+          */
+          {
+            key: 'startup-script',
+            value: `
+              #! /bin/bash
+              sudo apt-get update
+              sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+              wget -q -O - https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+              sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+              sudo apt-get update
+              sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+              docker network create jenkins
+              docker volume create jenkins-docker-certs
+              docker volume create jenkins-data
+              docker container run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind
+
+              sudo mkdir /home/all-as-code-files
+              echo "configuration-as-code:1.43" > /home/all-as-code-files/plugins.txt
+              echo -e "FROM jenkinsci/blueocean \nCOPY plugins.txt /usr/share/jenkins/ref/plugins.txt \nRUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt" > /home/all-as-code-files/Dockerfile
+              docker build -t custom-docker:1.0 /home/all-as-code-files/
+              docker container run --name jenkins-blueocean --rm --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --publish 8080:8080 --publish 50000:50000 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro custom-docker:1.0 
+            `
+          },
         ]
       },
+      
       //Firewall
       tags: ['jenkins']
       /**
@@ -49,7 +75,7 @@ async function quickstart() {
     }
 
     
-    console.log(`Creationg VM ${vmName}...`);
+    console.log(`Creating VM ${vmName}...`);
     const vm = zone.vm(vmName);
     const [, operation] = await vm.create(config);
     //const [vm, operation, apiResponse] = await zone.createVM(vmName, config);
