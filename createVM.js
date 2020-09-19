@@ -17,22 +17,30 @@ async function quickstart() {
       http: true,
       metadata: {
         items: [
-          /**
           {
             key: 'startup-script',
             value: `
               #! /bin/bash
               wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
-              sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
-              /etc/apt/sources.list.d/jenkins.list'
+              sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
               sudo apt-get update
               sudo apt-get install -y jenkins
               sudo apt update
               sudo apt install -y openjdk-8-jdk
+
+              sudo export JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+              sudo echo "
+                #!groovy \n
+                import jenkins.model.* \n
+                import hudson.util.*; \n
+                import jenkins.install.*; \n
+                def instance = Jenkins.getInstance() \n
+                instance.setInstallState(InstallState.INITIAL_SETUP_COMPLETED) \n
+              " > /var/lib/jenkins/init.groovy.d/basic-security.groovy
               sudo systemctl start jenkins
             `
           },
-          */
+         /*
           {
             key: 'startup-script',
             value: `
@@ -50,10 +58,11 @@ async function quickstart() {
               sudo docker container run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind
 
               sudo mkdir /home/all-as-code-files
-              echo "configuration-as-code:1.43" > /home/all-as-code-files/plugins.txt
+              echo "
+                configuration-as-code:1.43 \n
+              " > /home/all-as-code-files/plugins.txt
               echo -e "
                 FROM jenkinsci/blueocean \n
-                COPY plugins.txt /usr/share/jenkins/ref/plugins.txt \n
                 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt \n
                 ENV JENKINS_USER admin \n
                 ENV JENKINS_PASS ThisIs@StrongP@ssword \n
@@ -67,6 +76,7 @@ async function quickstart() {
               sudo docker container run --name jenkins-blueocean --rm --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --publish 8080:8080 --publish 50000:50000 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro custom-docker:1.0 
             `
           },
+          */
         ]
       },
       
