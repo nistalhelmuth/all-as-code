@@ -8,7 +8,7 @@ async function quickstart() {
   // Create a new VM using the latest OS image of your choice.
   try {
     const zone = compute.zone('us-central1-c');
-    const vm = zone.vm('node-vm-test');
+    const vm = zone.vm('all-as-code-instance');
     vm.delete(function(err, operation, apiResponse) {
       // `operation` is an Operation object that can be used to check the status
       // of the request.
