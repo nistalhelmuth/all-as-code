@@ -1,0 +1,58 @@
+jenkins:
+  systemMessage: "\n\nDemo setup for Jenkins Configuration as Code plugin......\n\n"
+
+  numExecutors: 1
+  mode: NORMAL
+  scmCheckoutRetryCount: 3
+  labelString: "master-label"  
+  
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+       - id: admin
+         password: admin123
+         
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: true
+   
+  crumbIssuer: "standard"
+  
+  remotingSecurity:
+    enabled: true
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+        - usernamePassword:
+            scope:    GLOBAL
+            id:       github-user
+            username: nistalhelmuth
+            password: morryson2
+            description: github username/password  
+
+jobs:
+  - script: >
+      pipelineJob('pipeline-creator') {
+        authenticationToken("6c616e0575d44d8cf41e959f401b6a87e23f00d0")
+        authorization {
+          permissionAll("admin")
+          blocksInheritance()
+        }
+        definition {
+          cpsScm {
+            scm {
+              git {
+                remote {
+                  github('nistalhelmuth/pipelines-sandbox')
+                  credentials('github-user')
+                }
+                branch('*/master')
+              }
+            }
+            lightweight()
+          }
+        }
+      }
