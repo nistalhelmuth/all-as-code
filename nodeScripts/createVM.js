@@ -50,15 +50,15 @@ async function quickstart() {
               sudo docker container run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind
 
               sudo mkdir /home/all-as-code-files
-              echo "configuration-as-code:1.43" > /home/all-as-code-files/plugins.txt
+              echo "
+                configuration-as-code:1.43
+                job-dsl:1.77
+              " > /home/all-as-code-files/plugins.txt
               echo -e "
                 FROM jenkinsci/blueocean \n
                 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt \n
-                COPY plugins.txt /usr/share/jenkins/ref/plugins.txt \n
-                ENV JENKINS_USER admin \n
-                ENV JENKINS_PASS ThisIs@StrongP@ssword \n
-                ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false \n
-                ENV CASC_JENKINS_CONFIG https://raw.githubusercontent.com/nistalhelmuth/pipelines-sandbox/master/jenkins.yaml \n
+                ENV JAVA_OPTS ${`"`}-Djenkins.install.runSetupWizard=false ${"${JAVA_OPTS:-}"}${`"`} \n
+                ENV CASC_JENKINS_CONFIG https://raw.githubusercontent.com/nistalhelmuth/all-as-code/master/jenkins.yaml \n
                 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
               " > /home/all-as-code-files/Dockerfile
               
