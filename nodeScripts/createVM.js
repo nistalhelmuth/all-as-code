@@ -1,18 +1,15 @@
-// Imports the Google Cloud client library
-const Compute = require('@google-cloud/compute');
 
-// Creates a client
-const compute = new Compute();
 
-async function quickstart() {
+export async function createVm(res, compute, vmName, type) {
   // Create a new VM using the latest OS image of your choice.
   try {
     const zone = compute.zone('us-central1-c');
 
-    const vmName = 'all-as-code-instance';
+    // const vmName = 'all-as-code-instance';
     const config = {
       os: 'ubuntu',
-      machineType: 'g1-small',
+      //machineType: 'g1-small',
+      machineType: type,
       https: true,
       http: true,
       metadata: {
@@ -60,11 +57,13 @@ async function quickstart() {
                 ENV JAVA_OPTS ${`"`}-Djenkins.install.runSetupWizard=false ${"${JAVA_OPTS:-}"}${`"`} \n
                 ENV CASC_JENKINS_CONFIG https://raw.githubusercontent.com/nistalhelmuth/all-as-code/master/jenkins.yaml \n
                 RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+                EXPOSE 80
+                EXPOSE 8080
               " > /home/all-as-code-files/Dockerfile
               
               
               sudo docker build -t custom-docker:1.0 /home/all-as-code-files/
-              sudo docker container run --name jenkins-blueocean --rm --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --publish 8080:8080 --publish 50000:50000 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro custom-docker:1.0 
+              sudo docker container run --name jenkins-blueocean --rm --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --publish 8080:8080 --publish 80:80 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro custom-docker:1.0 
             `
           },
         ]
@@ -77,7 +76,7 @@ async function quickstart() {
     
     console.log(`Creating VM ${vmName}...`);
     const vm = zone.vm(vmName);
-    const [, operation] = await vm.create(config);
+    const [vm, operation, apiResponse] = await vm.create(config);
     //const [vm, operation, apiResponse] = await zone.createVM(vmName, config);
 
     console.log(`Polling operation ${operation.id}...`);
@@ -96,9 +95,18 @@ async function quickstart() {
     //await pingVM(ip);
 
     console.log(`\n${vmName} created succesfully`);
-    
+    res.status(200).send({
+        id: vm.metadata.id,
+        dateCreated: vm.metadata.creationTimestamp,
+        name: vm.metadata.name,
+        diskSize: vm.metadata.disks[0].diskSizeGb,
+        publicIp: vm.metadata.networkInterfaces[0].accessConfigs[0].natIP,
+    });
   } catch (err) {
     console.error('ERROR:', err);
+    res.status(400).send({
+      error: err.message
+    });
   }
 }
 
@@ -119,4 +127,4 @@ async function pingVM(ip) {
   }
 }
 
-quickstart();
+// quickstart();

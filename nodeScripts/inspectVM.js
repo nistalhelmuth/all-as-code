@@ -5,9 +5,9 @@ async function main() {
    try {
     
     const zone = compute.zone('us-central1-c');
-    const vm = zone.vm('node-vm-test');
+    const vm = zone.vm('all-as-code-instance2');
 
-    vm.getMetadata(function(err, metadata, apiResponse) {});
+    //vm.getMetadata(function(err, metadata, apiResponse) {});
 
     //-
     // If the callback is omitted, we'll return a Promise.
