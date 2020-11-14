@@ -10,8 +10,8 @@ jenkins:
     local:
       allowsSignup: false
       users:
-       - id: admin
-         password: admin123
+       - id: test
+         password: test123
          
   authorizationStrategy:
     loggedInUsersCanDoAnything:
