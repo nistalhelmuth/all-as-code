@@ -54,36 +54,16 @@ app.post("/createvm", function(req, res) {
         https: true,
         http: true,
         metadata: {
-          /**
           items: [
             {
               key: 'startup-script',
               value: `
-                wget
-                chmod 
-                ./script.sh nistalhelmuth/pipelines-sandbox > /home/logs.txt
-                #! /bin/bash
-                wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
-                sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-                sudo apt-get update
-                sudo apt-get install -y jenkins
-                sudo apt update
-                sudo apt install -y openjdk-8-jdk
-                sudo systemctl start jenkins
-                
-                sudo sed -i '/JAVA_ARGS=\"-Djava.awt.headless=true\"/c\JAVA_ARGS=\"-Djava.awt.headless=true-Djenkins.install.runSetupWizard=false\"' /etc/default/jenkins
-                sudo mkdir /var/lib/jenkins/init.groovy.d
-                sudo chmod -R 777 /var/lib/jenkins/init.groovy.d
-                sudo echo $'#!groovy\nimport jenkins.model.*\nimport hudson.util.*;\nimport jenkins.install.*;\nimport hudson.security.*\ndef instance = Jenkins.getInstance()\ndef hudsonRealm = new HudsonPrivateSecurityRealm(false)\nhudsonRealm.createAccount(\"admin\",\"admin123\")\ninstance.setSecurityRealm(hudsonRealm)\ninstance.setInstallState(InstallState.INITIAL_SETUP_COMPLETED)\ninstance.save()' > /var/lib/jenkins/init.groovy.d/basic-security.groovy
-                sudo systemctl restart jenkins
-
-                sudo wget -P /home http://127.0.0.1:8080/jnlpJars/jenkins-cli.jar
-                sudo java -jar /home/jenkins-cli.jar -s http://localhost:8080/ -auth admin:admin123 install-plugin configuration-as-code job-dsl git -deploy
-                sudo export CASC_JENKINS_CONFIG=https://raw.githubusercontent.com/nistalhelmuth/all-as-code/master/jenkins.yaml
+                sudo wget -P /home/ https://raw.githubusercontent.com/nistalhelmuth/all-as-code/naive2/script.sh
+                sudo chmod +x /home/script.sh
+                sudo /home/script.sh nistalhelmuth/pipelines-sandbox > /home/logs.txt
               `
             },
           ]
-          */
         },
         //Firewall
         tags: ['jenkins']
