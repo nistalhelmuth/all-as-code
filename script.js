@@ -1,7 +1,9 @@
 sudo apt-get update
-wget -q -O - https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common docker-ce docker-ce-cli containerd.io
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
@@ -39,3 +41,7 @@ sudo echo "downloading"
 sudo wget -P /home http://127.0.0.1:8080/jnlpJars/jenkins-cli.jar
 sudo java -jar /home/jenkins-cli.jar -s http://localhost:8080/ -auth admin:admin123 install-plugin configuration-as-code job-dsl git blueocean -deploy
 sudo wget -P /var/lib/jenkins/ https://raw.githubusercontent.com/nistalhelmuth/all-as-code/master/jenkins.yaml
+sudo sed -i '/JAVA_ARGS=\"-Djava.awt.headless=true\"/c\JAVA_ARGS=\"-Djava.awt.headless=true-Djenkins.install.runSetupWizard=false\"' /etc/default/jenkins
+sed -i 's/HERE/'$1'/g' /var/lib/jenkins/jenkins.yaml
+sudo usermod -a -G docker jenkins
+sudo systemctl restart jenkins
