@@ -60,8 +60,8 @@ app.post("/createvm", function(req, res) {
               key: 'startup-script',
               value: `
                 wget
-                chmod
-                ./script > /home/logs.txt
+                chmod 
+                ./script.sh nistalhelmuth/pipelines-sandbox > /home/logs.txt
                 #! /bin/bash
                 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
                 sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
