@@ -24,7 +24,7 @@ sleep 60
 sudo sed -i '/JAVA_ARGS=\"-Djava.awt.headless=true\"/c\JAVA_ARGS=\"-Djava.awt.headless=true-Djenkins.install.runSetupWizard=false\"' /etc/default/jenkins
 sudo mkdir /var/lib/jenkins/init.groovy.d
 sudo chmod -R 777 /var/lib/jenkins/init.groovy.d
-sudo echo $'#!groovy\nimport jenkins.model.*\nimport hudson.util.*;\nimport jenkins.install.*;\nimport hudson.security.*\ndef instance = Jenkins.getInstance()\ndef hudsonRealm = new HudsonPrivateSecurityRealm(false)\nhudsonRealm.createAccount(\"admin\",\"admin123\")\ninstance.setSecurityRealm(hudsonRealm)\ninstance.setInstallState(InstallState.INITIAL_SETUP_COMPLETED)\ninstance.save()' > /var/lib/jenkins/init.groovy.d/basic-security.groovy
+sudo echo -e '#!groovy\nimport jenkins.model.*\nimport hudson.util.*;\nimport jenkins.install.*;\nimport hudson.security.*\ndef instance = Jenkins.getInstance()\ndef hudsonRealm = new HudsonPrivateSecurityRealm(false)\nhudsonRealm.createAccount("admin","admin123")\ninstance.setSecurityRealm(hudsonRealm)\ninstance.setInstallState(InstallState.INITIAL_SETUP_COMPLETED)\ninstance.save()' > /var/lib/jenkins/init.groovy.d/basic-security.groovy
 sudo systemctl restart jenkins
 while $(sleep 1); do
   echo "waiting jenkins to restart..."
