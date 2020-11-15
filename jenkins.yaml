@@ -59,6 +59,7 @@ jobs:
           githubPush()
         }
       }
+  - script: >
       pipelineJob('testing-pipeline') {
         authenticationToken("6c616e0575d44d8cf41e959f401b6a87e23f00d0")
         authorization {
