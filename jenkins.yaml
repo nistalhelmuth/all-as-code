@@ -35,7 +35,7 @@ credentials:
 
 jobs:
   - script: >
-      pipelineJob('pipeline-creator') {
+      pipelineJob('master-pipeline') {
         authenticationToken("6c616e0575d44d8cf41e959f401b6a87e23f00d0")
         authorization {
           permissionAll("admin")
@@ -54,5 +54,32 @@ jobs:
             }
             lightweight()
           }
+        }
+        triggers {
+          githubPush()
+        }
+      }
+      pipelineJob('testing-pipeline') {
+        authenticationToken("6c616e0575d44d8cf41e959f401b6a87e23f00d0")
+        authorization {
+          permissionAll("admin")
+          blocksInheritance()
+        }
+        definition {
+          cpsScm {
+            scm {
+              git {
+                remote {
+                  github('nistalhelmuth/pipelines-sandbox')
+                  credentials('github-user')
+                }
+                branch('*/testing')
+              }
+            }
+            lightweight()
+          }
+        }
+        triggers {
+          githubPush()
         }
       }
