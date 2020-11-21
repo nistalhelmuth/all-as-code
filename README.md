@@ -64,7 +64,7 @@ More info at: [Google Cloud Official Docs](https://cloud.google.com/iam/docs/cre
 
 11. Start react app: `npm start`
 
-![UI](https://github.com/nistalhelmuth/all-as-code/blob/master/Arquitectura.png "Architecture")
+![UI](https://github.com/nistalhelmuth/all-as-code/blob/master/UI.png "UI")
 
 ### 3.3 Start Virtual Machine from UI
 
@@ -80,7 +80,7 @@ This will start the following:
 
 You can view the status:
 
-![Status](https://github.com/nistalhelmuth/all-as-code/blob/master/Flujo.png "Status")
+![Status](https://github.com/nistalhelmuth/all-as-code/blob/master/status.png "Status")
 
 ## 3.4 Interacttion with Jenkins tool
 
@@ -88,8 +88,8 @@ You can view the status:
 
 12. Start your pipeline:
 
-![PipelineGreen](https://github.com/nistalhelmuth/all-as-code/blob/master/Flujo.png "Flujo")
+![PipelineGreen](https://github.com/nistalhelmuth/all-as-code/blob/master/greenPipeline.png "green Pipeline")
 
-![PipelineRed](https://github.com/nistalhelmuth/all-as-code/blob/master/Flujo.png "Flujo")
+![PipelineRed](https://github.com/nistalhelmuth/all-as-code/blob/master/redPipeline.png "red Pipeline")
 
 **This is not an official Google product.**
