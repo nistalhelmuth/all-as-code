@@ -14,7 +14,7 @@ To help the understood of DevOps I implemented some aditionall tools:
 * Git: becouse it provide easy acces for some steps of this proyect
 
 
-![Arquitectura](https://github.com/nistalhelmuth/all-as-code/blob/master/Arquitectura.png "Architecture")
+![Arquitectura](https://github.com/nistalhelmuth/all-as-code/blob/master/screens/Arquitectura.png "Architecture")
 
 
 # Live demo
@@ -64,7 +64,7 @@ More info at: [Google Cloud Official Docs](https://cloud.google.com/iam/docs/cre
 
 11. Start react app: `npm start`
 
-![UI](https://github.com/nistalhelmuth/all-as-code/blob/master/UI.png "UI")
+![UI](https://github.com/nistalhelmuth/all-as-code/blob/master/screens/UI.png "UI")
 
 ### 3.3 Start Virtual Machine from UI
 
@@ -76,11 +76,11 @@ More info at: [Google Cloud Official Docs](https://cloud.google.com/iam/docs/cre
 
 This will start the following:
 
-![Flujo](https://github.com/nistalhelmuth/all-as-code/blob/master/Flujo.png "Flujo")
+![Flujo](https://github.com/nistalhelmuth/all-as-code/blob/master/screens/Flujo.png "Flujo")
 
 You can view the status:
 
-![Status](https://github.com/nistalhelmuth/all-as-code/blob/master/status.png "Status")
+![Status](https://github.com/nistalhelmuth/all-as-code/blob/master/screens/status.png "Status")
 
 ## 3.4 Interacttion with Jenkins tool
 
@@ -88,8 +88,8 @@ You can view the status:
 
 12. Start your pipeline:
 
-![PipelineGreen](https://github.com/nistalhelmuth/all-as-code/blob/master/greenPipeline.png "green Pipeline")
+![PipelineGreen](https://github.com/nistalhelmuth/all-as-code/blob/master/screens/greenPipeline.png "green Pipeline")
 
-![PipelineRed](https://github.com/nistalhelmuth/all-as-code/blob/master/redPipeline.png "red Pipeline")
+![PipelineRed](https://github.com/nistalhelmuth/all-as-code/blob/master/screens/redPipeline.png "red Pipeline")
 
 **This is not an official Google product.**

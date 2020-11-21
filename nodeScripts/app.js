@@ -58,11 +58,11 @@ app.post("/createvm", function(req, res) {
             {
               key: 'startup-script',
               value: `
-                sudo wget -P /home/ https://raw.githubusercontent.com/nistalhelmuth/all-as-code/naive2/script.sh
+                sudo wget -P /home/ https://raw.githubusercontent.com/nistalhelmuth/all-as-code/master/script.sh
                 sudo chmod +x /home/script.sh
                 sudo mkdir /home/logs
                 sudo chmod -R 777 /home/logs
-                sudo wget -P /home/ https://raw.githubusercontent.com/nistalhelmuth/all-as-code/naive2/serve.py
+                sudo wget -P /home/ https://raw.githubusercontent.com/nistalhelmuth/all-as-code/master/serve.py
                 sudo nohup python3 /home/serve.py &
                 sudo /home/script.sh nistalhelmuth/pipelines-sandbox > /home/logs/logs.txt
               `
