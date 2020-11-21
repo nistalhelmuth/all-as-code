@@ -1,14 +1,10 @@
 import http.server
 import socketserver
-
+import os
 PORT = 8000
-DIRECTORY = "/home/logs"
-
-
-class Handler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=DIRECTORY, **kwargs)
-
-
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    httpd.serve_forever()
+web_dir = os.path.join(os.path.dirname(__file__), '/home/logs')
+os.chdir(web_dir)
+Handler = http.server.SimpleHTTPRequestHandler
+httpd = socketserver.TCPServer(("", PORT), Handler)
+print("serving at port", PORT)
+httpd.serve_forever()
