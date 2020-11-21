@@ -38,7 +38,6 @@ const FormInput = ({
       placeholder={placeholder}
       value={value}
       onChange={({ target }) => onChange(target.value)}
-      placeholder={placeholder}
     />
     <label className="error">{touched && error}</label>
   </>
@@ -228,7 +227,13 @@ class AppCore extends React.Component {
                                 <td className={column.className}>
                                   {
                                     column.link ? (
-                                      <a href={`http://${row[column.column]}:8080/blue/organizations/jenkins/pipelines`} target="_blank">http://{row[column.column]}</a>
+                                      <a
+                                        href={`http://${row[column.column]}:8080/blue/organizations/jenkins/pipelines`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                      >
+                                          http://{row[column.column]}
+                                        </a>
                                     ) : (
                                       <p>
                                         {row[column.column]}

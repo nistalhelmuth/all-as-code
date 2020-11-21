@@ -21,6 +21,7 @@ function* vmsFetcher() {
     }));
   }
 }
+  /**
 
 function* vmStatusFetcher(action) {
   const {
@@ -36,7 +37,6 @@ function* vmStatusFetcher(action) {
   yield put(actions.fetchVmStatusSuccess({
     log: response,
   }));
-  /**
   try {
     
   } catch (error) {
@@ -44,8 +44,8 @@ function* vmStatusFetcher(action) {
       message: error,
     }));
   }
-   */
 }
+  */
 
 function* vmsCreator(action) {
   const {
