@@ -1,0 +1,43 @@
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer */
+  -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+  -webkit-user-select: none; /* Chrome, Safari, and Opera */
+  -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+  z-index: 20;
+}
+
+.background:hover{
+  cursor: pointer;
+}
+
+.content {
+  display: flex;
+  margin: auto;
+  cursor: auto;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.code {
+  height: 500px;
+  width: 900px;
+  overflow: auto;
+  background-color: #f3f3f3;
+  overflow: hidden;
+}
+

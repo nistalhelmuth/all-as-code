@@ -58,36 +58,13 @@ app.post("/createvm", function(req, res) {
             {
               key: 'startup-script',
               value: `
-                #! /bin/bash
-                sudo apt-get update
-                sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-                wget -q -O - https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-                sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-                sudo apt-get update
-                sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-                sudo docker network create jenkins
-                sudo docker volume create jenkins-docker-certs
-                sudo docker volume create jenkins-data
-                sudo docker container run --name jenkins-docker --rm --detach --privileged --network jenkins --network-alias docker --env DOCKER_TLS_CERTDIR=/certs --volume jenkins-docker-certs:/certs/client --volume jenkins-data:/var/jenkins_home --publish 2376:2376 docker:dind
-
-                sudo mkdir /home/all-as-code-files
-                echo "
-                  configuration-as-code:1.43
-                  job-dsl:1.77
-                " > /home/all-as-code-files/plugins.txt
-                echo -e "
-                  FROM jenkinsci/blueocean \n
-                  COPY plugins.txt /usr/share/jenkins/ref/plugins.txt \n
-                  ENV JAVA_OPTS ${`"`}-Djenkins.install.runSetupWizard=false ${"${JAVA_OPTS:-}"}${`"`} \n
-                  ENV CASC_JENKINS_CONFIG https://raw.githubusercontent.com/nistalhelmuth/all-as-code/master/jenkins.yaml \n
-                  RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
-                  EXPOSE 80
-                  EXPOSE 8080
-                " > /home/all-as-code-files/Dockerfile
-                
-                sudo docker build -t custom-docker:1.0 /home/all-as-code-files/
-                sudo docker container run --name jenkins-blueocean --rm --detach --network jenkins --env DOCKER_HOST=tcp://docker:2376 --env DOCKER_CERT_PATH=/certs/client --env DOCKER_TLS_VERIFY=1 --publish 8080:8080 --publish 80:80 --volume jenkins-data:/var/jenkins_home --volume jenkins-docker-certs:/certs/client:ro custom-docker:1.0 
+                sudo wget -P /home/ https://raw.githubusercontent.com/nistalhelmuth/all-as-code/naive2/script.sh
+                sudo chmod +x /home/script.sh
+                sudo mkdir /home/logs
+                sudo chmod -R 777 /home/logs
+                sudo wget -P /home/ https://raw.githubusercontent.com/nistalhelmuth/all-as-code/naive2/serve.py
+                sudo nohup python3 /home/serve.py &
+                sudo /home/script.sh nistalhelmuth/pipelines-sandbox > /home/logs/logs.txt
               `
             },
           ]
@@ -147,10 +124,10 @@ app.post("/deletevm", function(req, res) {
         const operation = data[0];
         const apiResponse = data[1];
         //console.log(apiResponse)
+        console.log('Virtual machine deleted!');
+        res.status(200).send(apiResponse);
       });
 
-      console.log('Virtual machine deleted!');
-      res.status(200).send(apiResponse);
     } catch (err) {
       console.error('ERROR:', err);
       res.status(400).send({

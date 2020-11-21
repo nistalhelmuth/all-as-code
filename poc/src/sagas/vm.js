@@ -21,6 +21,31 @@ function* vmsFetcher() {
     }));
   }
 }
+  /**
+
+function* vmStatusFetcher(action) {
+  const {
+    payload: {
+      ip,
+    },
+  } = action;
+  const response = yield call(
+    api.fetchVmStatus,
+    '34.67.71.239',
+  );
+  console.log(response);
+  yield put(actions.fetchVmStatusSuccess({
+    log: response,
+  }));
+  try {
+    
+  } catch (error) {
+    yield put(actions.fetchVmStatusFail({
+      message: error,
+    }));
+  }
+}
+  */
 
 function* vmsCreator(action) {
   const {
@@ -69,6 +94,12 @@ yield takeLatest(
   types.VMS_FETCHED,
   vmsFetcher,
 );
+/**
+yield takeLatest(
+  types.VM_FETCHED_STATUS,
+  vmStatusFetcher,
+);
+ */
 yield takeLatest(
   types.VM_POSTED,
   vmsCreator,

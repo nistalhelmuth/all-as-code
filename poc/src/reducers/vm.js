@@ -1,6 +1,30 @@
 import { combineReducers } from 'redux';
 import * as types from '../types/vm';
 
+const defaultState = {
+  ip: undefined,
+}
+
+
+const modal = (state = defaultState, action) => {
+  switch (action.type) {
+    case types.VM_FETCHED_STATUS: {
+      const {
+        payload: {
+          ip,
+        },
+      } = action;
+      return {ip};
+    }
+    case types.VM_FETCHED_STATUS_CLOSED: {
+      return defaultState;
+    }
+    default: {
+      return state;
+    }
+  }
+}
+
 const byId = (state={}, action) => {
   switch (action.type) {
     case types.VMS_FETCHED: {
@@ -50,10 +74,12 @@ const order = (state=[], action) => {
 
 
 export default combineReducers({
+  modal,
   byId,
   order
 })
 
 //selectores
 export const getAllVMS = (state) => state.order.map((id) => state.byId[id])
+export const getLog = (state) => state.modal.ip;
 

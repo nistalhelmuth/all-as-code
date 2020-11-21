@@ -25,6 +25,38 @@ export const fetchVmsFail = ({
   }
 });
 
+export const fetchVmStatus = ({
+  ip,
+}) => ({
+  type: types.VM_FETCHED_STATUS,
+  payload:{
+    ip,
+  }
+});
+
+export const closeVmStatus = () => ({
+  type: types.VM_FETCHED_STATUS_CLOSED,
+  payload:{}
+});
+  
+export const fetchVmStatusSuccess = ({
+  log,
+}) => ({
+  type: types.VM_FETCHED_STATUS_SUCCEDDED,
+  payload:{
+    log,
+  }
+});
+
+export const fetchVmStatusFail = ({
+  message,
+}) => ({
+  type: types.VM_FETCHED_STATUS_FAILED,
+  payload:{
+    message,
+  }
+});
+
 export const createVm = ({
   name,
   type

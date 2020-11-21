@@ -8,3 +8,4 @@ export default combineReducers({
 });
 
 export const getAllVMS = (state) => fromVM.getAllVMS(state.vm);
+export const getLog = (state) => fromVM.getLog(state.vm);
