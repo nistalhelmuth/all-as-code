@@ -10,6 +10,12 @@ export const fetchVms = () => new Promise((resolve, reject) => {
     }
   }).catch((error) => reject(error));
 });
+
+export const fetchVmStatus = (
+  ip
+) => fetch(`http://${ip}:8000/logs.txt`, ).then((resultado) => {
+    console.log(resultado)
+});
   
 export const createVm = (
   name,

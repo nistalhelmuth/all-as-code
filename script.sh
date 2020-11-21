@@ -45,3 +45,4 @@ sudo sed -i '/JAVA_ARGS=\"-Djava.awt.headless=true\"/c\JAVA_ARGS=\"-Djava.awt.he
 sed -i 's/HERE/'$1'/g' /var/lib/jenkins/jenkins.yaml
 sudo usermod -a -G docker jenkins
 sudo systemctl restart jenkins
+sudo echo 'DONE!'

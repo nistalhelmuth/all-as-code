@@ -15,23 +15,33 @@ import {
   Col,
   UncontrolledTooltip
 } from "reactstrap";
+import Modal from '../Modal';
 import * as selector from '../../reducers';
 import * as actions from '../../actions/vm';
 import styles from './app.module.css';
+
+const required = (value) => (value ? undefined : 'Requerido*');
 
 const FormInput = ({
   input: { onChange },
   placeholder,
   type,
   value,
+  meta: {
+    error,
+    touched,
+  }
 }) => (
-  <Input
-    type={type}
-    placeholder={placeholder}
-    value={value}
-    onChange={({ target }) => onChange(target.value)}
-    formNoValidate
-  />
+  <>
+    <Input
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={({ target }) => onChange(target.value)}
+      placeholder={placeholder}
+    />
+    <label className="error">{touched && error}</label>
+  </>
 );
 
 const typeGas = [
@@ -54,20 +64,27 @@ const FormSelect = ({
   placeholder,
   value,
   options,
+  meta: {
+    error,
+    touched,
+  }
 }) => (
-  <Select
-    className="react-select info"
-    classNamePrefix="react-select"
-    onChange={value => onChange(value.name)}
-    value={value}
-    options={typeGas.map(column => {
-      return {
-        name: column,
-        label: column.text,
-      }
-    })}
-    placeholder={placeholder}
-  />
+  <>
+    <Select
+      className="react-select info"
+      classNamePrefix="react-select"
+      onChange={value => onChange(value.name)}
+      value={value}
+      options={typeGas.map(column => {
+        return {
+          name: column,
+          label: column.text,
+        }
+      })}
+      placeholder={placeholder}
+    />
+    <label className="error">{touched && error}</label>
+  </>
 );
 
 const header = [
@@ -87,7 +104,8 @@ const header = [
   },
   {
     text: 'IP',
-    column: 'publicIp'
+    column: 'publicIp',
+    link: true,
   },
   {
     text: 'día creado',
@@ -109,13 +127,15 @@ class AppCore extends React.Component {
       deleteVm,
       handleSubmit,
       fetchVms,
-      vms
+      vms,
+      fetchVmStatus,
     } = this.props;
     return (
       <div 
         className={`main-panel ${styles.app}`}
         data="blue"
       >
+        <Modal />
           <Card>
             <CardBody>
             <form onSubmit={handleSubmit(createVm.bind(this))}>
@@ -131,6 +151,7 @@ class AppCore extends React.Component {
                             name='name'
                             component={FormInput}
                             placeholder="nombre"
+                            validate={[required]}
                           />
                         </FormGroup>
                       </Col>
@@ -140,6 +161,7 @@ class AppCore extends React.Component {
                             name='tipo'
                             component={FormSelect}
                             placeholder="tipo"
+                            validate={[required]}
                           />
                         </FormGroup>
                       </Col>
@@ -149,6 +171,7 @@ class AppCore extends React.Component {
                             name='repo'
                             component={FormInput}
                             placeholder="repo"
+                            validate={[required]}
                           />
                         </FormGroup>
                       </Col>
@@ -186,7 +209,11 @@ class AppCore extends React.Component {
                       <tr>
                         {
                           header.map((column) => (
-                            <th className={column.className}>{column.text}</th>
+                            <th className={column.className}>
+                              <p>
+                                {column.text}
+                              </p>
+                            </th>
                           ))
                         }
                         <th className="text-right">Actions</th>
@@ -199,12 +226,34 @@ class AppCore extends React.Component {
                             { 
                               header.map((column) => (
                                 <td className={column.className}>
-                                  {column.extra}
-                                  {row[column.column]}
+                                  {
+                                    column.link ? (
+                                      <a href={`http://${row[column.column]}:8080/blue/organizations/jenkins/pipelines`} target="_blank">http://{row[column.column]}</a>
+                                    ) : (
+                                      <p>
+                                        {row[column.column]}
+                                      </p>
+                                    )
+                                  }
                                 </td>
                               ))
                             }
                             <td className="text-right">
+                              <Button
+                                className="btn-link"
+                                color="success"
+                                id="tooltip1"
+                                size="sm"
+                                onClick={() => fetchVmStatus(row.publicIp)}
+                              >
+                                <i className="tim-icons icon-pencil" />
+                              </Button>
+                              <UncontrolledTooltip
+                                delay={0}
+                                target="tooltip1"
+                              >
+                                Revisar
+                              </UncontrolledTooltip>
                               <Button
                                 className="btn-link"
                                 color="danger"
@@ -247,8 +296,12 @@ export default connect(
     fetchVms(){
       dispatch(actions.fetchVms());
     },
+    fetchVmStatus(ip){
+      dispatch(actions.fetchVmStatus({
+        ip,
+      }));
+    },
     createVm(values){
-      console.log(values.column)
       dispatch(actions.createVm(({
         ...values,
         type: values.tipo.column,
@@ -259,6 +312,5 @@ export default connect(
         name
       }));
     },
-    
   }),
 )(App);
