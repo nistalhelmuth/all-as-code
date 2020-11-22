@@ -64,7 +64,7 @@ app.post("/createvm", function(req, res) {
                 sudo chmod -R 777 /home/logs
                 sudo wget -P /home/ https://raw.githubusercontent.com/nistalhelmuth/all-as-code/master/serve.py
                 sudo nohup python3 /home/serve.py &
-                sudo /home/script.sh nistalhelmuth/pipelines-sandbox > /home/logs/logs.txt
+                sudo sh /home/script.sh nistalhelmuth/pipelines-sandbox > /home/logs/logs.txt
               `
             },
           ]
