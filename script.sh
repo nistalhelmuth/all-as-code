@@ -42,7 +42,7 @@ sudo wget -P /home http://127.0.0.1:8080/jnlpJars/jenkins-cli.jar
 sudo java -jar /home/jenkins-cli.jar -s http://localhost:8080/ -auth admin:admin123 install-plugin configuration-as-code job-dsl git blueocean -deploy
 sudo wget -P /var/lib/jenkins/ https://raw.githubusercontent.com/nistalhelmuth/all-as-code/master/jenkins.yaml
 sudo sed -i '/JAVA_ARGS=\"-Djava.awt.headless=true\"/c\JAVA_ARGS=\"-Djava.awt.headless=true-Djenkins.install.runSetupWizard=false\"' /etc/default/jenkins
-sudo sed -i "s/HERE/$1/g" /var/lib/jenkins/jenkins.yaml
+
 sudo usermod -a -G docker jenkins
 sudo systemctl restart jenkins
 sudo echo 'DONE!'
