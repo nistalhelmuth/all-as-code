@@ -45,16 +45,16 @@ const FormInput = ({
 
 const typeGas = [
   {
-    text:'g1-micro',
-    column:'g1-micro',
+    text: 'Pequeño(e2-small)',
+    column: 'e2-small',
   },
   {
-    text: 'g1-small',
+    text: 'Mediano(g1-small)',
     column: 'g1-small',
   },
   {
-    text: 'g1-medium',
-    column: 'g1-medium',
+    text: 'Grande(e2-standard-2)',
+    column: 'e2-standard-2',
   },
 ]
 

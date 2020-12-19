@@ -35,7 +35,7 @@ credentials:
 
 jobs:
   - script: >
-      pipelineJob('master-pipeline') {
+      pipelineJob('main-pipeline') {
         authenticationToken("6c616e0575d44d8cf41e959f401b6a87e23f00d0")
         authorization {
           permissionAll("admin")
@@ -46,35 +46,10 @@ jobs:
             scm {
               git {
                 remote {
-                  github('nistalhelmuth/pipelines-sandbox')
+                  github('nistalhelmuth/pipeline-wordpress')
                   credentials('github-user')
                 }
-                branch('*/master')
-              }
-            }
-            lightweight()
-          }
-        }
-        triggers {
-          githubPush()
-        }
-      }
-  - script: >
-      pipelineJob('testing-pipeline') {
-        authenticationToken("6c616e0575d44d8cf41e959f401b6a87e23f00d0")
-        authorization {
-          permissionAll("admin")
-          blocksInheritance()
-        }
-        definition {
-          cpsScm {
-            scm {
-              git {
-                remote {
-                  github('nistalhelmuth/pipelines-sandbox')
-                  credentials('github-user')
-                }
-                branch('*/testing')
+                branch('*/main')
               }
             }
             lightweight()
